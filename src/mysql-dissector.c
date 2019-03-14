@@ -242,16 +242,16 @@ int mysql_handle_client_cmd(mysql_session* sess, char cmd, int msg_len, char* ms
     
     switch(cmd){
         case COM_QUIT:
-            printf("COM_QUIT");
+            printf("COM_QUIt\n");
             ret = SESSION_DEL;
             break;
         case COM_QUERY:
-        printf("prepare");
+            printf("COM_QUERY\n");
             ret = record_query_info(sess, cmd, msg_len, msg);
             sess->state = SESSION_STATE_QUERY_RESULT;
             break; 
         case COM_INIT_DB:
-            printf("COM_INIT_DB");
+            printf("COM_INIT_DB\n");
             ret = record_db_info(sess, cmd, msg_len, msg);
             sess->state = SESSION_STATE_QUERY_RESULT;
             break;
@@ -269,7 +269,9 @@ int mysql_handle_client_cmd(mysql_session* sess, char cmd, int msg_len, char* ms
             /* TODO: add binlog support. we should add new state to support it. */
             break;
         case COM_STMT_PREPARE:
-            printf("prepare");
+            printf("prepare %s\n", msg);
+            ret = record_query_info(sess, cmd, msg_len, msg);
+            sess->state = SESSION_STATE_QUERY_RESULT;
             /* TODO: */
             break;
         default:
