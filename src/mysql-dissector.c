@@ -239,15 +239,19 @@ int mysql_dissect_login_resp(mysql_session* sess, half_stream* stream){
 
 int mysql_handle_client_cmd(mysql_session* sess, char cmd, int msg_len, char* msg){
     int ret = 0;
+    
     switch(cmd){
         case COM_QUIT:
+            printf("COM_QUIT");
             ret = SESSION_DEL;
             break;
         case COM_QUERY:
+        printf("prepare");
             ret = record_query_info(sess, cmd, msg_len, msg);
             sess->state = SESSION_STATE_QUERY_RESULT;
             break; 
         case COM_INIT_DB:
+            printf("COM_INIT_DB");
             ret = record_db_info(sess, cmd, msg_len, msg);
             sess->state = SESSION_STATE_QUERY_RESULT;
             break;
@@ -265,6 +269,7 @@ int mysql_handle_client_cmd(mysql_session* sess, char cmd, int msg_len, char* ms
             /* TODO: add binlog support. we should add new state to support it. */
             break;
         case COM_STMT_PREPARE:
+            printf("prepare");
             /* TODO: */
             break;
         default:
