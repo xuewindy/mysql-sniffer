@@ -187,7 +187,6 @@ void log_session_query(mysql_session* sess){
 
     /* truncate long query */
     int truncate_len = config_get_truncate_len();
-    printf("start to log\n");
     if(info->count <= truncate_len){
         /* may cause the origin query broken due to charset */
         remove_newline(info->data);
